@@ -55,7 +55,7 @@ export const accountsTable = pgTable('accounts', {
   updatedAt: timestamp('updated_at').notNull(),
 });
 
-export const verificationsTable = pgTable('verifications', {  
+export const verificationsTable = pgTable('verifications', {
   id: text('id').primaryKey(),
   identifier: text('identifier').notNull(),
   value: text('value').notNull(),
@@ -76,10 +76,10 @@ export const clinicsTable = pgTable('clinics', {
 export const usersToClinicsTable = pgTable('users_to_clinics', {
   userId: text('user_id')
     .notNull()
-    .references(() => usersTable.id),
+    .references(() => usersTable.id, { onDelete: 'cascade' }),
   clinicId: uuid('clinic_id')
     .notNull()
-    .references(() => clinicsTable.id),
+    .references(() => clinicsTable.id, { onDelete: 'cascade' }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .defaultNow()
