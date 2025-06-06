@@ -12,8 +12,8 @@ export const upsertDoctorSchema = z
     appointmentPriceInCents: z.number().min(1, {
       message: 'Preço da consulta é obrigatório',
     }),
-    availableFromWeekday: z.number().min(0).max(6),
-    availableToWeekday: z.number().min(0).max(6),
+    availableFromWeekDay: z.number().min(0).max(6),
+    availableToWeekDay: z.number().min(0).max(6),
     availableFromTime: z.string().min(1, {
       message: 'Hora de início é obrigatória',
     }),
