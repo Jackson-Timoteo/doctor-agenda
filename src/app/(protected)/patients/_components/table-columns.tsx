@@ -1,21 +1,12 @@
 "use client"
 
-import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
-import { ColumnDef } from "@tanstack/react-table"
-import { EditIcon, MoreVerticalIcon, Trash2Icon } from "lucide-react";
+import { ColumnDef } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { patientsTable } from "@/db/schema"
 
-type Patient = typeof patientsTable.$inferSelect;
+import PatiensTableActions from "./table-actions";
 
+type Patient = typeof patientsTable.$inferSelect;
 
 export const patientsTableColumns: ColumnDef<Patient>[] = [
     {
@@ -53,26 +44,9 @@ export const patientsTableColumns: ColumnDef<Patient>[] = [
         id: "actions",
         cell: (params) => {
             const patient = params.row.original;
+
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger>
-                        <Button variant="ghost" size="icon">
-                            <MoreVerticalIcon className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuLabel>{patient.name}</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <EditIcon className="h-4 w-4" />
-                            Editar
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Trash2Icon className="h-4 w-4" />
-                            Excluir
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <PatiensTableActions patient={patient} />
             )
         }
     }
