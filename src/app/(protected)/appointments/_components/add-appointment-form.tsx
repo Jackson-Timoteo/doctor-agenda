@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { addAppointment } from "@/actions/add-appointment";
-import { getAvailableTimes } from "@/actions/get-available-times";
+import { getAvailableTimes } from "@/actions/get-available.times";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
