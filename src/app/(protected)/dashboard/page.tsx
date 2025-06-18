@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { and, count, eq, gte, lte, sql, sum } from "drizzle-orm";
+import { and, count, desc, eq, gte, lte, sql, sum } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -10,6 +10,7 @@ import { auth } from "@/lib/auth";
 
 import AppointmentsChart from "./_components/appointments-chart";
 import { DatePicker } from "./_components/date-picker";
+import DoctorsList from "./_components/doctors-list";
 import StatsCards from "./_components/stats-card";
 
 interface DashboardPageProps {
@@ -36,7 +37,7 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
         redirect(`/dashboard?from=${dayjs().format("YYYY-MM-DD")}&to=${dayjs().add(1, "month").format("YYYY-MM-DD")}`);
     }
 
-    const [totalRevenue, totalAppointments, totalPatients, totalDoctors] = await Promise.all([
+    const [[totalRevenue], [totalAppointments], [totalPatients], [totalDoctors], doctorsList] = await Promise.all([
         db.select({
             total: sum(appointmentsTable.appointmentPriceInCents),
         }).from(appointmentsTable).where(
@@ -64,7 +65,22 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
             total: count()
         }).from(doctorsTable).where(
             eq(doctorsTable.clinicId, session.user.clinic.id),
-        )
+        ),
+        db.select({
+            id: doctorsTable.id,
+            name: doctorsTable.name,
+            avatarImageUrl: doctorsTable.avatarImageUrl,
+            specialty: doctorsTable.specialty,
+            appointments: count(appointmentsTable.id),
+        }).from(doctorsTable)
+            .leftJoin(appointmentsTable, and(
+                eq(appointmentsTable.doctorId, doctorsTable.id),
+                gte(appointmentsTable.date, new Date(from)),
+                lte(appointmentsTable.date, new Date(to)),
+            ),
+            ).where(eq(doctorsTable.clinicId, session.user.clinic.id))
+            .groupBy(doctorsTable.id)
+            .orderBy(desc(count(appointmentsTable.id))).limit(10)
     ]);
 
     const chartStartDate = dayjs().subtract(10, "days").startOf("day").toDate();
@@ -88,8 +104,6 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
         .orderBy(sql`DATE(${appointmentsTable.date})`);
 
 
-
-
     return (
         <PageContainer>
             <PageHeader>
@@ -105,17 +119,19 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
             </PageHeader>
             <PageContent>
                 <StatsCards
-                    totalRevenue={totalRevenue[0].total ? Number(totalRevenue[0].total) : null}
-                    totalAppointments={totalAppointments[0].total}
-                    totalPatients={totalPatients[0].total}
-                    totalDoctors={totalDoctors[0].total}
+                    totalRevenue={totalRevenue.total ? Number(totalRevenue.total) : null}
+                    totalAppointments={totalAppointments.total}
+                    totalPatients={totalPatients.total}
+                    totalDoctors={totalDoctors.total}
                 />
-                <div className="grid grid-cols-[2fr_1fr]">
+                <div className="grid grid-cols-[2.25fr_1fr] gap-4">
                     <AppointmentsChart
-                        dailyAppointmentsData={dailyAppointmentsData}
-                    />
+                        dailyAppointmentsData={dailyAppointmentsData} />
+                    <DoctorsList doctors={doctorsList} />
                 </div>
+
             </PageContent>
+
         </PageContainer>
     );
 }
