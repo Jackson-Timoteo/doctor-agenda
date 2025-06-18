@@ -10,7 +10,7 @@ import { auth } from "@/lib/auth";
 
 import AppointmentsChart from "./_components/appointments-chart";
 import { DatePicker } from "./_components/date-picker";
-import DoctorsList from "./_components/doctors-list";
+import DoctorsList from "./_components/list-doctors";
 import StatsCards from "./_components/stats-card";
 
 interface DashboardPageProps {
