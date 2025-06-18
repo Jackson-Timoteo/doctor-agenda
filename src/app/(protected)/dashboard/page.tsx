@@ -11,6 +11,7 @@ import { auth } from "@/lib/auth";
 import AppointmentsChart from "./_components/appointments-chart";
 import { DatePicker } from "./_components/date-picker";
 import DoctorsList from "./_components/list-doctors";
+import ListSpecialties from "./_components/list-specialties";
 import StatsCards from "./_components/stats-card";
 
 interface DashboardPageProps {
@@ -37,7 +38,7 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
         redirect(`/dashboard?from=${dayjs().format("YYYY-MM-DD")}&to=${dayjs().add(1, "month").format("YYYY-MM-DD")}`);
     }
 
-    const [[totalRevenue], [totalAppointments], [totalPatients], [totalDoctors], doctorsList] = await Promise.all([
+    const [[totalRevenue], [totalAppointments], [totalPatients], [totalDoctors], doctorsList, specialtiesList] = await Promise.all([
         db.select({
             total: sum(appointmentsTable.appointmentPriceInCents),
         }).from(appointmentsTable).where(
@@ -80,7 +81,21 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
             ),
             ).where(eq(doctorsTable.clinicId, session.user.clinic.id))
             .groupBy(doctorsTable.id)
-            .orderBy(desc(count(appointmentsTable.id))).limit(10)
+            .orderBy(desc(count(appointmentsTable.id))).limit(10),
+        db.select({
+            specialty: doctorsTable.specialty,
+            appointments: count(appointmentsTable.id),
+        }).from(appointmentsTable)
+            .innerJoin(doctorsTable, eq(appointmentsTable.doctorId, doctorsTable.id))
+            .where(
+                and(
+                    eq(appointmentsTable.clinicId, session.user.clinic.id),
+                    gte(appointmentsTable.date, new Date(from)),
+                    lte(appointmentsTable.date, new Date(to)),
+                )
+            )
+            .groupBy(doctorsTable.specialty)
+            .orderBy(desc(count(appointmentsTable.id))),
     ]);
 
     const chartStartDate = dayjs().subtract(10, "days").startOf("day").toDate();
@@ -129,7 +144,9 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
                         dailyAppointmentsData={dailyAppointmentsData} />
                     <DoctorsList doctors={doctorsList} />
                 </div>
-
+                <div className="grid grid-cols-[1fr_1fr] gap-4">
+                    <ListSpecialties topSpecialties={specialtiesList} />
+                </div>
             </PageContent>
 
         </PageContainer>

@@ -7,7 +7,6 @@ interface TopDoctorsProps {
     doctors: {
         id: string;
         name: string;
-        avatarImageUrl: string | null;
         specialty: string;
         appointments: number;
     }[];
@@ -47,7 +46,7 @@ export default function DoctorsList({ doctors }: TopDoctorsProps) {
                             </div>
                             <div className="text-right">
                                 <span className="text-muted-foreground text-sm font-medium">
-                                    {doctor.appointments} agend.
+                                    {doctor.appointments} Agend...
                                 </span>
                             </div>
                         </div>
