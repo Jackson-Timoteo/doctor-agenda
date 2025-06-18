@@ -1,13 +1,17 @@
 import dayjs from "dayjs";
 import { and, count, desc, eq, gte, lte, sql, sum } from "drizzle-orm";
+import { Calendar } from "lucide-react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DataTable } from "@/components/ui/data-table";
 import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, PageHeaderContent, PageTitle } from "@/components/ui/page-container";
 import { db } from "@/db";
 import { appointmentsTable, doctorsTable, patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
+import { appointmentsTableColumns } from "../appointments/_components/table-columns";
 import AppointmentsChart from "./_components/appointments-chart";
 import { DatePicker } from "./_components/date-picker";
 import DoctorsList from "./_components/list-doctors";
@@ -38,7 +42,7 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
         redirect(`/dashboard?from=${dayjs().format("YYYY-MM-DD")}&to=${dayjs().add(1, "month").format("YYYY-MM-DD")}`);
     }
 
-    const [[totalRevenue], [totalAppointments], [totalPatients], [totalDoctors], doctorsList, specialtiesList] = await Promise.all([
+    const [[totalRevenue], [totalAppointments], [totalPatients], [totalDoctors], doctorsList, specialtiesList, todayAppointments] = await Promise.all([
         db.select({
             total: sum(appointmentsTable.appointmentPriceInCents),
         }).from(appointmentsTable).where(
@@ -96,6 +100,17 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
             )
             .groupBy(doctorsTable.specialty)
             .orderBy(desc(count(appointmentsTable.id))),
+        db.query.appointmentsTable.findMany({
+            where: and(
+                eq(appointmentsTable.clinicId, session.user.clinic.id),
+                gte(appointmentsTable.date, new Date(from)),
+                lte(appointmentsTable.date, new Date(to)),
+            ),
+            with: {
+                doctor: true,
+                patient: true,
+            }
+        })
     ]);
 
     const chartStartDate = dayjs().subtract(10, "days").startOf("day").toDate();
@@ -145,6 +160,19 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
                     <DoctorsList doctors={doctorsList} />
                 </div>
                 <div className="grid grid-cols-[1fr_1fr] gap-4">
+                    <Card>
+                        <CardHeader>
+                            <div className="flex items-center gap-3">
+                                <Calendar className="text-muted-foreground" />
+                                <CardTitle className="text-base">Agendamentos de hoje</CardTitle>
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <DataTable
+                                columns={appointmentsTableColumns}
+                                data={todayAppointments} />
+                        </CardContent>
+                    </Card>
                     <ListSpecialties topSpecialties={specialtiesList} />
                 </div>
             </PageContent>
