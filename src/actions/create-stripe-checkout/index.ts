@@ -13,18 +13,9 @@ export const createStripeCheckout = actionClient.action(async () => {
   if (!session?.user) {
     throw new Error('Unauthorized');
   }
-  if (!session.user.clinic) {
-    throw new Error('Clinic not found');
-  }
-
   if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error('STRIPE_SECRET_KEY is not set');
+    throw new Error('Stripe secret key not found');
   }
-
-  if (!process.env.STRIPE_WEBHOOK_SECRET) {
-    throw new Error('STRIPE_WEBHOOK_SECRET is not set');
-  }
-
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2025-05-28.basil',
   });
@@ -40,7 +31,7 @@ export const createStripeCheckout = actionClient.action(async () => {
     },
     line_items: [
       {
-        price: process.env.STRIPE_ESSENTIAL_PRICE_ID,
+        price: process.env.STRIPE_ESSENTIAL_PLAN_PRICE_ID,
         quantity: 1,
       },
     ],

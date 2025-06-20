@@ -2,7 +2,7 @@
 
 import {
   CalendarDays,
-  Gem,
+ Gem,
   LayoutDashboard,
   LogOut,
   Stethoscope,
