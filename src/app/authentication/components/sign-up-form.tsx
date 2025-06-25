@@ -59,7 +59,7 @@ const SignUpForm = () => {
       },
       onError: (ctx) => {
         if (ctx.error.code === 'USER_ALREADY_EXISTS') {
-          toast.error("E-mail já catradatro, utilize o login para acessar sua conta.");
+          toast.error("E-mail já cadastrado, utilize o login para acessar sua conta.");
           return
         }
         toast.error("Erro ao criar conta");
@@ -68,37 +68,59 @@ const SignUpForm = () => {
   }
 
   return (
-    <Card>
+    <Card className="w-full shadow-lg border-0 bg-white">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <CardHeader>
-            <CardTitle>Criar conta</CardTitle>
-            <CardDescription>Criar uma conta para continuar</CardDescription>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <CardHeader className="space-y-1 pb-6">
+            <CardTitle className="text-2xl font-bold text-center text-gray-900">
+              Criar conta
+            </CardTitle>
+            <CardDescription className="text-center text-gray-600">
+              Criar uma conta para continuar
+            </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          
+          <CardContent className="space-y-4 px-6">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-700">
+                    Nome
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Digite seu nome" {...field} />
+                    <Input 
+                      placeholder="Digite seu nome" 
+                      type="text"
+                      autoComplete="name"
+                      className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      {...field} 
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-sm" />
                 </FormItem>
               )}
             />
+            
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>E-mail</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-700">
+                    E-mail
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Digite seu e-mail" {...field} />
+                    <Input 
+                      placeholder="Digite seu e-mail" 
+                      type="email"
+                      autoComplete="email"
+                      className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      {...field} 
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-sm" />
                 </FormItem>
               )}
             />
@@ -108,19 +130,32 @@ const SignUpForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Senha:</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-700">
+                    Senha
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Digite seu senha" type="password" {...field} />
+                    <Input 
+                      placeholder="Digite sua senha" 
+                      type="password"
+                      autoComplete="new-password"
+                      className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      {...field} 
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-sm" />
                 </FormItem>
               )}
             />
           </CardContent>
-          <CardFooter>
-            <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+          
+          <CardFooter className="px-6 pb-6">
+            <Button 
+              type="submit" 
+              className="w-full h-12 text-base font-medium bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200" 
+              disabled={form.formState.isSubmitting}
+            >
               {form.formState.isSubmitting ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 'Criar conta'
               )}
@@ -133,3 +168,4 @@ const SignUpForm = () => {
 };
 
 export default SignUpForm;
+

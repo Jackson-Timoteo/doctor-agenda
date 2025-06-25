@@ -13,7 +13,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 
-
 const loginSchema = z.object({
     email: z
         .string()
@@ -42,7 +41,7 @@ const LoginForm = () => {
                 router.push('/dashboard');
             },
             onError: () => {
-                toast.error("E-mail ou senha invâlido");
+                toast.error("E-mail ou senha inválido");
             },
         });
     };
@@ -55,24 +54,37 @@ const LoginForm = () => {
     };
 
     return (
-        <Card>
+        <Card className="w-full shadow-lg border-0 bg-white">
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-                    <CardHeader>
-                        <CardTitle>Login</CardTitle>
-                        <CardDescription>Faça login para continuar</CardDescription>
+                <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+                    <CardHeader className="space-y-1 pb-6">
+                        <CardTitle className="text-2xl font-bold text-center text-gray-900">
+                            Login
+                        </CardTitle>
+                        <CardDescription className="text-center text-gray-600">
+                            Faça login para continuar
+                        </CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-4">
+
+                    <CardContent className="space-y-4 px-6">
                         <FormField
                             control={form.control}
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>E-mail</FormLabel>
+                                    <FormLabel className="text-sm font-medium text-gray-700">
+                                        E-mail
+                                    </FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Digite seu e-mail" {...field} />
+                                        <Input
+                                            placeholder="Digite seu e-mail"
+                                            type="email"
+                                            autoComplete="email"
+                                            className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                            {...field}
+                                        />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-sm" />
                                 </FormItem>
                             )}
                         />
@@ -82,31 +94,54 @@ const LoginForm = () => {
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Senha:</FormLabel>
+                                    <FormLabel className="text-sm font-medium text-gray-700">
+                                        Senha
+                                    </FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Digite seu senha" type="password" {...field} />
+                                        <Input
+                                            placeholder="Digite sua senha"
+                                            type="password"
+                                            autoComplete="current-password"
+                                            className="h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                            {...field}
+                                        />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-sm" />
                                 </FormItem>
                             )}
                         />
                     </CardContent>
-                    <CardFooter>
-                        <div className="w-full space-y-2">
-                            <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+
+                    <CardFooter className="px-6 pb-6">
+                        <div className="w-full space-y-4">
+                            <Button
+                                type="submit"
+                                className="w-full h-12 text-base font-medium bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200"
+                                disabled={form.formState.isSubmitting}
+                            >
                                 {form.formState.isSubmitting ? (
-                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    <Loader2 className="w-5 h-5 animate-spin" />
                                 ) : (
                                     'Entrar'
                                 )}
                             </Button>
+
+                            <div className="relative">
+                                <div className="absolute inset-0 flex items-center">
+                                    <span className="w-full border-t border-gray-300" />
+                                </div>
+                                <div className="relative flex justify-center text-sm">
+                                    <span className="px-2 bg-white text-gray-500">ou</span>
+                                </div>
+                            </div>
+
                             <Button
                                 variant="outline"
-                                className="w-full"
+                                className="w-full h-12 text-base font-medium border-gray-300 hover:bg-gray-50 focus:ring-4 focus:ring-gray-200 transition-all duration-200"
                                 type="button"
                                 onClick={handleGoogleLogin}
                             >
-                                <svg viewBox="0 0 24 24" className="mr-2 h-4 w-4">
+                                <svg viewBox="0 0 24 24" className="mr-3 h-5 w-5">
                                     <path
                                         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                                         fill="#4285F4"
@@ -135,3 +170,4 @@ const LoginForm = () => {
 }
 
 export default LoginForm;
+
