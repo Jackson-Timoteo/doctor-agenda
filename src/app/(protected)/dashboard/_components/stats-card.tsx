@@ -53,8 +53,8 @@ const StatsCards = ({
             {stats.map((stat) => {
                 const Icon = stat.icon;
                 return (
-                    <Card 
-                        key={stat.title} 
+                    <Card
+                        key={stat.title}
                         className="transition-all duration-200 hover:shadow-md border-0 shadow-sm bg-white"
                     >
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 px-4 pt-4 sm:px-6 sm:pt-6">
