@@ -45,6 +45,25 @@ const getSpecialtyIcon = (specialty: string) => {
 export default function TopSpecialties({
     topSpecialties,
 }: TopSpecialtiesProps) {
+    // Verifica se topSpecialties está vazio
+    if (!topSpecialties || topSpecialties.length === 0) {
+        return (
+            <Card className="mx-auto w-full">
+                <CardContent className="p-4 sm:p-6">
+                    <div className="mb-6 sm:mb-8 flex items-center justify-between">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                            <Hospital className="text-muted-foreground h-4 w-4 sm:h-5 sm:w-5" />
+                            <CardTitle className="text-sm sm:text-base">Especialidades</CardTitle>
+                        </div>
+                    </div>
+                    <div className="text-center text-muted-foreground text-sm sm:text-base">
+                        Nenhuma especialidade disponível no momento.
+                    </div>
+                </CardContent>
+            </Card>
+        );
+    }
+
     const maxAppointments = Math.max(
         ...topSpecialties.map((i) => i.appointments),
     );
@@ -95,4 +114,3 @@ export default function TopSpecialties({
         </Card>
     );
 }
-
