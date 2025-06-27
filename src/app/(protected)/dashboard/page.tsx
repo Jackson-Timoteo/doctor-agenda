@@ -63,6 +63,7 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
         });
 
     return (
+
         <PageContainer>
             <PageHeader>
                 <PageHeaderContent>
@@ -76,66 +77,35 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
                 </PageActions>
             </PageHeader>
             <PageContent>
-                {/* Stats Cards - Responsivo: 1 col (mobile) → 2 cols (tablet) → 4 cols (desktop) */}
                 <StatsCards
                     totalRevenue={totalRevenue.total ? Number(totalRevenue.total) : null}
                     totalAppointments={totalAppointments.total}
                     totalPatients={totalPatients.total}
                     totalDoctors={totalDoctors.total}
                 />
-
-                {/* Chart and Doctors Section - Responsivo: empilhado (mobile/tablet) → lado a lado (desktop) */}
-                <div className="grid gap-6 lg:grid-cols-[2.25fr_1fr]">
+                <div className="grid grid-cols-1 lg:grid-cols-[2.25fr_1fr] gap-4 mt-4">
                     <AppointmentsChart
-                        dailyAppointmentsData={dailyAppointmentsData}
-                    />
+                        dailyAppointmentsData={dailyAppointmentsData} />
                     <DoctorsList doctors={topDoctors} />
                 </div>
-
-                {/* Today's Appointments and Specialties - Responsivo: empilhado (mobile) → lado a lado (tablet+) */}
-                <div className="grid gap-6 md:grid-cols-2">
-                    <Card className="shadow-sm border-0 bg-white">
-                        <CardHeader className="pb-4">
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-4 mt-4">
+                    <Card>
+                        <CardHeader>
                             <div className="flex items-center gap-3">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/10">
-                                    <Calendar className="h-5 w-5 text-blue-600" />
-                                </div>
-                                <CardTitle className="text-base font-semibold text-gray-900 sm:text-lg">
-                                    Agendamentos de hoje
-                                </CardTitle>
+                                <Calendar className="text-muted-foreground" />
+                                <CardTitle className="text-base">Agendamentos de hoje</CardTitle>
                             </div>
                         </CardHeader>
-                        <CardContent className="pt-0">
-                            {/* DataTable com scroll horizontal em mobile */}
-                            <div className="overflow-x-auto -mx-4 sm:mx-0">
-                                <div className="min-w-full px-4 sm:px-0">
-                                    <DataTable
-                                        columns={appointmentsTableColumns}
-                                        data={todayAppointments}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Empty state para quando não há agendamentos */}
-                            {todayAppointments.length === 0 && (
-                                <div className="flex flex-col items-center justify-center py-8 text-center">
-                                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 mb-4">
-                                        <Calendar className="h-8 w-8 text-gray-400" />
-                                    </div>
-                                    <h3 className="text-sm font-medium text-gray-900 mb-1">
-                                        Nenhum agendamento hoje
-                                    </h3>
-                                    <p className="text-xs text-gray-500">
-                                        Os agendamentos de hoje aparecerão aqui.
-                                    </p>
-                                </div>
-                            )}
+                        <CardContent>
+                            <DataTable
+                                columns={appointmentsTableColumns}
+                                data={todayAppointments} />
                         </CardContent>
                     </Card>
-
                     <ListSpecialties topSpecialties={topSpecialties} />
                 </div>
             </PageContent>
+
         </PageContainer>
     );
 }

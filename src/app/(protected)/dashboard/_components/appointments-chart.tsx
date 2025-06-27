@@ -60,15 +60,25 @@ const AppointmentsChart = ({
 
     return (
         <Card>
-            <CardHeader className="flex flex-row items-center gap-2">
-                <DollarSign />
-                <CardTitle>Agendamentos e Faturamento</CardTitle>
+            <CardHeader className="flex flex-row items-center gap-2 p-4 sm:p-6">
+                <DollarSign className="h-4 w-4 sm:h-5 sm:w-5" />
+                <CardTitle className="text-sm sm:text-base lg:text-lg">
+                    Agendamentos e Faturamento
+                </CardTitle>
             </CardHeader>
-            <CardContent>
-                <ChartContainer config={chartConfig} className="min-h-[200px]">
+            <CardContent className="p-4 sm:p-6 pt-0">
+                <ChartContainer 
+                    config={chartConfig} 
+                    className="min-h-[200px] sm:min-h-[250px] lg:min-h-[300px] w-full"
+                >
                     <AreaChart
                         data={chartData}
-                        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                        margin={{ 
+                            top: 20, 
+                            right: window.innerWidth < 640 ? 10 : 30, 
+                            left: window.innerWidth < 640 ? 10 : 20, 
+                            bottom: 5 
+                        }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis
@@ -76,12 +86,16 @@ const AppointmentsChart = ({
                             tickLine={false}
                             tickMargin={10}
                             axisLine={false}
+                            fontSize={window.innerWidth < 640 ? 10 : 12}
+                            interval={window.innerWidth < 640 ? 2 : 0}
                         />
                         <YAxis
                             yAxisId="left"
                             tickLine={false}
                             axisLine={false}
                             tickMargin={8}
+                            fontSize={window.innerWidth < 640 ? 10 : 12}
+                            width={window.innerWidth < 640 ? 30 : 40}
                         />
                         <YAxis
                             yAxisId="right"
@@ -89,7 +103,13 @@ const AppointmentsChart = ({
                             tickLine={false}
                             axisLine={false}
                             tickMargin={8}
-                            tickFormatter={(value) => formatCurrency(value)}
+                            fontSize={window.innerWidth < 640 ? 10 : 12}
+                            width={window.innerWidth < 640 ? 40 : 60}
+                            tickFormatter={(value) => 
+                                window.innerWidth < 640 
+                                    ? `R$${(value / 1000).toFixed(0)}k`
+                                    : formatCurrency(value)
+                            }
                         />
                         <ChartTooltip
                             content={
@@ -99,10 +119,10 @@ const AppointmentsChart = ({
                                             return (
                                                 <>
                                                     <div className="h-3 w-3 rounded bg-[#10B981]" />
-                                                    <span className="text-muted-foreground">
+                                                    <span className="text-muted-foreground text-xs sm:text-sm">
                                                         Faturamento:
                                                     </span>
-                                                    <span className="font-semibold">
+                                                    <span className="font-semibold text-xs sm:text-sm">
                                                         {formatCurrency(Number(value))}
                                                     </span>
                                                 </>
@@ -111,10 +131,10 @@ const AppointmentsChart = ({
                                         return (
                                             <>
                                                 <div className="h-3 w-3 rounded bg-[#0B68F7]" />
-                                                <span className="text-muted-foreground">
+                                                <span className="text-muted-foreground text-xs sm:text-sm">
                                                     Agendamentos:
                                                 </span>
-                                                <span className="font-semibold">{value}</span>
+                                                <span className="font-semibold text-xs sm:text-sm">{value}</span>
                                             </>
                                         );
                                     }}
@@ -155,3 +175,4 @@ const AppointmentsChart = ({
 };
 
 export default AppointmentsChart;
+
