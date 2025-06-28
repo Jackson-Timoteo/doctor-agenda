@@ -66,42 +66,48 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
     const availability = getAvailability(doctor);
 
     return (
-        <Card>
-            <CardHeader>
-                <div className="flex items-center gap-2">
-                    <Avatar className="h-10 w-10">
+        <Card className="h-full flex flex-col">
+            <CardHeader className="pb-3">
+                <div className="flex items-center gap-3">
+                    <Avatar className="h-10 w-10 flex-shrink-0">
                         <AvatarFallback>{doctorInitials}</AvatarFallback>
                     </Avatar>
-                    <div>
-                        <h3 className="text-sm font-medium">{doctor.name}</h3>
-                        <p className="text-muted-foreground text-sm">{doctor.specialty}</p>
+                    <div className="min-w-0 flex-1">
+                        <h3 className="text-sm font-medium truncate">{doctor.name}</h3>
+                        <p className="text-muted-foreground text-sm truncate">{doctor.specialty}</p>
                     </div>
                 </div>
             </CardHeader>
             <Separator />
-            <CardContent className="flex flex-col gap-2">
-                <Badge variant="outline">
-                    <CalendarIcon className="mr-1" />
-                    {availability.from.format("dddd")} a {availability.to.format("dddd")}
+            <CardContent className="flex flex-col gap-2 py-3 flex-1">
+                <Badge variant="outline" className="justify-start text-xs">
+                    <CalendarIcon className="mr-1 h-3 w-3 flex-shrink-0" />
+                    <span className="truncate">
+                        {availability.from.format("dddd")} a {availability.to.format("dddd")}
+                    </span>
                 </Badge>
-                <Badge variant="outline">
-                    <ClockIcon className="mr-1" />
-                    {availability.from.format("HH:mm")} as{" "}
-                    {availability.to.format("HH:mm")}
+                <Badge variant="outline" className="justify-start text-xs">
+                    <ClockIcon className="mr-1 h-3 w-3 flex-shrink-0" />
+                    <span className="truncate">
+                        {availability.from.format("HH:mm")} as{" "}
+                        {availability.to.format("HH:mm")}
+                    </span>
                 </Badge>
-                <Badge variant="outline">
-                    <DollarSignIcon className="mr-1" />
-                    {formatCurrency(doctor.appointmentPriceInCents)}
+                <Badge variant="outline" className="justify-start text-xs">
+                    <DollarSignIcon className="mr-1 h-3 w-3 flex-shrink-0" />
+                    <span className="truncate">
+                        {formatCurrency(doctor.appointmentPriceInCents)}
+                    </span>
                 </Badge>
             </CardContent>
             <Separator />
-            <CardFooter className="flex flex-col gap-2">
+            <CardFooter className="flex flex-col gap-2 pt-3">
                 <Dialog
                     open={isUpsertDoctorDialogOpen}
                     onOpenChange={setIsUpsertDoctorDialogOpen}
                 >
                     <DialogTrigger asChild>
-                        <Button className="w-full">Ver detalhes</Button>
+                        <Button className="w-full text-sm">Ver detalhes</Button>
                     </DialogTrigger>
                     <UpsertDoctorForm
                         isOpen={isUpsertDoctorDialogOpen}
@@ -115,24 +121,28 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
                 </Dialog>
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
-                        <Button variant="outline" className="w-full">
-                            <TrashIcon />
-                            Deletar médico
+                        <Button variant="outline" className="w-full text-sm">
+                            <TrashIcon className="h-4 w-4 mr-1" />
+                            <span className="hidden sm:inline">Deletar médico</span>
+                            <span className="sm:hidden">Deletar</span>
                         </Button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent>
+                    <AlertDialogContent className="mx-4 max-w-md">
                         <AlertDialogHeader>
-                            <AlertDialogTitle>
+                            <AlertDialogTitle className="text-base">
                                 Tem certeza que deseja deletar esse médico?
                             </AlertDialogTitle>
-                            <AlertDialogDescription>
+                            <AlertDialogDescription className="text-sm">
                                 Essa ação não pode ser revertida. Isso irá deletar o médico e
                                 todas as consultas agendadas.
                             </AlertDialogDescription>
                         </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                            <AlertDialogAction onClick={handleDeleteDoctorClick}>
+                        <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+                            <AlertDialogCancel className="w-full sm:w-auto">Cancelar</AlertDialogCancel>
+                            <AlertDialogAction 
+                                onClick={handleDeleteDoctorClick}
+                                className="w-full sm:w-auto"
+                            >
                                 Deletar
                             </AlertDialogAction>
                         </AlertDialogFooter>
@@ -144,3 +154,4 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
 };
 
 export default DoctorCard;
+

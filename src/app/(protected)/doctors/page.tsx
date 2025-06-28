@@ -3,7 +3,6 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import {
-    PageActions,
     PageContainer,
     PageContent,
     PageDescription,
@@ -42,13 +41,13 @@ const DoctorsPage = async () => {
                 <PageHeaderContent>
                     <PageTitle>Médicos</PageTitle>
                     <PageDescription>Gerencie os médicos da sua clínica</PageDescription>
-                </PageHeaderContent>
-                <PageActions>
-                    <AddDoctorButton />
-                </PageActions>
+                    <div className="mt-4">
+                        <AddDoctorButton />
+                    </div>
+                </PageHeaderContent>        
             </PageHeader>
             <PageContent>
-                <div className="grid grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     {doctors.map((doctor) => (
                         <DoctorCard key={doctor.id} doctor={doctor} />
                     ))}
@@ -59,3 +58,4 @@ const DoctorsPage = async () => {
 };
 
 export default DoctorsPage;
+
