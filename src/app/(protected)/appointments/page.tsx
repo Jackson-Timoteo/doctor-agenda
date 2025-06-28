@@ -8,8 +8,6 @@ import {
     PageContainer,
     PageContent,
     PageDescription,
-    PageHeader,
-    PageHeaderContent,
     PageTitle,
 } from "@/components/ui/page-container";
 import { db } from "@/db";
@@ -52,21 +50,25 @@ const AppointmentsPage = async () => {
 
     return (
         <PageContainer>
-            <PageHeader>
-                <PageHeaderContent>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+                <div>
                     <PageTitle>Agendamentos</PageTitle>
                     <PageDescription>
                         Gerencie os agendamentos da sua clínica
                     </PageDescription>
-                </PageHeaderContent>
-                <PageActions>
-                    <AddAppointmentButton patients={patients} doctors={doctors} />
-                </PageActions>
-            </PageHeader>
+                </div>
+                <div>
+                    <PageActions>
+                        <AddAppointmentButton patients={patients} doctors={doctors} />
+                    </PageActions>
+                </div>
+            </div>
+
             <PageContent>
                 <DataTable data={appointments} columns={appointmentsTableColumns} />
             </PageContent>
         </PageContainer>
+
     );
 };
 
