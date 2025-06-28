@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 
 import { DataTable } from "@/components/ui/data-table";
 import {
-    PageActions,
     PageContainer,
     PageContent,
     PageDescription,
@@ -42,13 +41,11 @@ const PatientsPage = async () => {
             <PageHeader>
                 <PageHeaderContent>
                     <PageTitle>Pacientes</PageTitle>
-                    <PageDescription>
-                        Gerencie os pacientes da sua clínica
-                    </PageDescription>
+                    <PageDescription>Gerencie os pacientes da sua clínica</PageDescription>
+                    <div className="mt-4">
+                        <AddPatientButton />
+                    </div>
                 </PageHeaderContent>
-                <PageActions>
-                    <AddPatientButton />
-                </PageActions>
             </PageHeader>
             <PageContent>
                 <DataTable data={patients} columns={patientsTableColumns} />
