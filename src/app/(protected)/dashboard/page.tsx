@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
-import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, PageHeaderContent, PageTitle } from "@/components/ui/page-container";
+import { PageContainer, PageContent, PageDescription, PageTitle } from "@/components/ui/page-container";
 import { getDashboard } from "@/data/get-dashboard";
 import { auth } from "@/lib/auth";
 
@@ -65,17 +65,21 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
     return (
 
         <PageContainer>
-            <PageHeader>
-                <PageHeaderContent>
+            {/* Cabeçalho com layout responsivo */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+                <div>
                     <PageTitle>Dashboard</PageTitle>
                     <PageDescription>
                         Tenha uma visão geral de todas as consultas da sua clínica.
                     </PageDescription>
-                </PageHeaderContent>
-                <PageActions>
+                </div>
+
+                <div>
                     <DatePicker />
-                </PageActions>
-            </PageHeader>
+                </div>
+            </div>
+
+            {/* Conteúdo principal */}
             <PageContent>
                 <StatsCards
                     totalRevenue={totalRevenue.total ? Number(totalRevenue.total) : null}
@@ -83,11 +87,12 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
                     totalPatients={totalPatients.total}
                     totalDoctors={totalDoctors.total}
                 />
+
                 <div className="grid grid-cols-1 lg:grid-cols-[2.25fr_1fr] gap-4 mt-4">
-                    <AppointmentsChart
-                        dailyAppointmentsData={dailyAppointmentsData} />
+                    <AppointmentsChart dailyAppointmentsData={dailyAppointmentsData} />
                     <DoctorsList doctors={topDoctors} />
                 </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-4 mt-4">
                     <Card>
                         <CardHeader>
@@ -99,14 +104,15 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
                         <CardContent>
                             <DataTable
                                 columns={appointmentsTableColumns}
-                                data={todayAppointments} />
+                                data={todayAppointments}
+                            />
                         </CardContent>
                     </Card>
                     <ListSpecialties topSpecialties={topSpecialties} />
                 </div>
             </PageContent>
-
         </PageContainer>
+
     );
 }
 

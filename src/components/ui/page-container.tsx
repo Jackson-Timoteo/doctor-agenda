@@ -3,8 +3,8 @@ export const PageContainer = ({ children }: { children: React.ReactNode }) => {
 
 };
 
-export const PageHeader = ({ children }: { children: React.ReactNode }) => {
-    return <div className="flex items-center justify-between">{children}</div>
+export const PageHeader = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+    return <div className={`flex items-center justify-between ${className || ''}`}>{children}</div>
 };
 
 export const PageHeaderContent = ({ children }: { children: React.ReactNode }) => {
